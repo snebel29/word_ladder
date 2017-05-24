@@ -47,3 +47,4 @@ for vertex, path in traverse(graph, 'fear'):
 
 print('No path found!')
 sys.exit(1)
+
