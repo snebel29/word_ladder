@@ -15,9 +15,10 @@ class Graph(object):
 
     def _build_buckets(self):
         for word in self._words:
-            for i in range(len(word)):
-                bucket = '{}_{}'.format(word[:i], word[i+1:])
-                self._buckets[bucket].append(word)
+            for a in range(2):
+                for i in range(len(word)+a):
+                    bucket = '{0}_{1}'.format(word[:i], word[i+a:])
+                    self._buckets[bucket].append(word)
 
     def _build_graph(self):
         for bucket, neighbors in self._buckets.items():

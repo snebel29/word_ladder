@@ -42,9 +42,21 @@ class TestWordLadder(unittest.TestCase):
     def test_word_list_is_created(self):
         ok_(isinstance(self.word_ladder.words, list))
 
-    def test_find_path(self):
+    def test_find_path_same_length(self):
         eq_(self.word_ladder.find_path('fear', 'fear'), ['fear'])
         eq_(self.word_ladder.find_path('fear', 'sail'), ['fear', 'hear', 'heir', 'hair', 'hail', 'sail'])
+
+    def test_find_path_different_length(self):
+        self.word_ladder = WordLadder(os.path.join(word_lists_dir, 'word_lists', 'linux_english_words'))
+        eq_(self.word_ladder.find_path('Abe', 'Abel'), ['Abe', 'Abel'])
+
+    def test_find_path_not_found(self):
+        eq_(self.word_ladder.find_path('Abelardo', 'Abel'), None)
+
+    def test_find_path_different_length_going_up_and_down(self):
+        self.word_ladder = WordLadder(os.path.join(word_lists_dir, 'word_lists', 'fixture.1'))
+        eq_(self.word_ladder.find_path('a', 'eoha'), ['a', 'ai', 'aie', 'wie', 'wieo', 'ieo', 'eo', 'eoh', 'eoha'])
+
 
 
 
