@@ -46,9 +46,8 @@ class TestWordLadder(unittest.TestCase):
         eq_(self.word_ladder.find_path('fear', 'fear'), ['fear'])
         eq_(self.word_ladder.find_path('fear', 'sail'), ['fear', 'hear', 'heir', 'hair', 'hail', 'sail'])
 
-    def test_walk_trough(self):
-         word_ladder = WordLadder(os.path.join(word_lists_dir, 'word_lists', 'linux_english_words_length_4'))
-         eq_(('fear', ['fear']), next(word_ladder._walk_trough('fear')))
-         eq_(('feat', ['fear', 'feat']), next(word_ladder._walk_trough('fear')))
+
+
+
 
 
