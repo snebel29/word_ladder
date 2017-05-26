@@ -1,6 +1,8 @@
 from collections import defaultdict, deque
 from itertools import product
 
+__version__ = '0.0.1'
+
 
 class Graph(object):
     def __init__(self, words):
@@ -14,6 +16,10 @@ class Graph(object):
         return self._graph
 
     def _build_buckets(self):
+        """
+        a = 0 - Append words to buckets with one more letter
+        a = 1 - Append words to buckets with the same number of letter
+        """
         for word in self._words:
             for a in range(2):
                 for i in range(len(word)+a):
@@ -29,12 +35,19 @@ class Graph(object):
 
 
 class WordLadder(object):
-    def __init__(self, path):
-        self.words = open(path).read().splitlines()
+    def __init__(self, dictionary):
+        if isinstance(dictionary, list):
+            self.words = dictionary
+        else:
+            self.words = open(dictionary).read().splitlines()
+
         self.graph = Graph(self.words).build()
 
-    def find_path(self, start, end):
+    def find_path(self, start, end, all_paths=False):
         for vertex, path in self._walk_trough(start):
+            if all_paths:
+                print(path)
+
             if vertex == end:
                 return path
 

@@ -1,1 +1,1 @@
-from .word_ladder import WordLadder, Graph
+from .word_ladder import WordLadder, Graph, __version__
