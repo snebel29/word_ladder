@@ -26,7 +26,7 @@ import sys
 from docopt import docopt
 from word_ladder import WordLadder, __version__
 
-def main(args):
+def run(args):
     result = WordLadder(
         args['<dict_file>']).find_path(
             args['<from>'],
@@ -37,8 +37,12 @@ def main(args):
 
     return result
 
-def parse_args(args=sys.argv):
+def parse_args(args=sys.argv[1:]):
     return docopt(__doc__, args, version=__version__)
 
+def main():
+    print('path: {0}'.format(run(parse_args())))
+
 if __name__ == '__main__':
-    print('path: {0}'.format(main(parse_args())))
+    main()
+

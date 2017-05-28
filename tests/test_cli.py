@@ -1,7 +1,7 @@
 import unittest
 from nose.tools import raises
 from nose.tools import ok_, eq_
-from word_ladder.cli import main, parse_args
+from word_ladder.cli import main, run, parse_args
 
 
 class TestCli(unittest.TestCase):
@@ -9,6 +9,10 @@ class TestCli(unittest.TestCase):
     @raises(SystemExit)
     def test_cli_with_no_arguments_should_fail(self):
         parse_args()
+
+    @raises(SystemExit)
+    def test_main_as_seen_from_setup_tools(self):
+        main()
 
     def test_cli_with_arguments_should_parse(self):
         args = parse_args(['from', 'fear', 'to' , 'sail', 'using', 'file'])
@@ -30,7 +34,10 @@ class TestCli(unittest.TestCase):
           "using": True
         }
 
-        eq_(main(args), ['ola', 'olo'])
+        eq_(run(args), ['ola', 'olo'])
+
+
+
 
 
 
