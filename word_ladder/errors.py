@@ -1,0 +1,2 @@
+class WordsNotDefined(Exception):
+    pass
