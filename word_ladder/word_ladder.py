@@ -18,17 +18,17 @@ class Graph(object):
 
     def _build_buckets(self, all_lengths):
         """
-        a = 1 - Append words to buckets with the same number of letter
-        a = 0 - Append words to buckets with one more letter
+        modifier = 1 - Append words to buckets with the same number of letter
+        modifier = 0 - Append words to buckets with one more letter
         """
         for word in self._words:
-            for a in range(1, (all_lengths * -1), -1):
-                for i in range(len(word)+a):
-                    bucket = '{0}_{1}'.format(word[:i], word[i+a:])
+            for modifier in range(1, (all_lengths * -1), -1):
+                for i in range(len(word)+modifier):
+                    bucket = '{0}_{1}'.format(word[:i], word[i+modifier:])
                     self._buckets[bucket].append(word)
 
     def _build_graph(self):
-        for bucket, neighbors in self._buckets.items():
+        for _, neighbors in self._buckets.items():
             for word1, word2 in product(neighbors, repeat=2):
                 if word1 != word2:
                     self._graph[word1].add(word2)
@@ -61,19 +61,24 @@ class WordLadder(object):
     def graph(self):
         if self.words_has_same_length():
             if not self._graph_same_length:
-                self._graph_same_length = Graph(self.words).build(all_lengths=False)
+                self._graph_same_length = Graph(self.words).build(
+                                                    all_lengths=False)
 
             return self._graph_same_length
 
         else:
             if not self._graph_diff_length:
-                self._graph_diff_length = Graph(self.words).build(all_lengths=True)
+                self._graph_diff_length = Graph(self.words).build(
+                                                    all_lengths=True)
 
             return self._graph_diff_length
 
     def find_path(self, start=None, end=None, all_paths=False):
-        if start: self.start = start
-        if end: self.end = end
+        if start:
+            self.start = start
+
+        if end:
+            self.end = end
 
         if not start or not end:
             raise WordsNotDefined('Either start or end is not defined')
@@ -90,10 +95,12 @@ class WordLadder(object):
     def _walk_trough(self, start, graph):
         visited = set()
         queue = deque([[start]])
+
         while queue:
             path = queue.popleft()
             vertex = path[-1]
             yield vertex, path
+
             for neighbor in graph[vertex] - visited:
                 visited.add(neighbor)
                 queue.append(path + [neighbor])
