@@ -10,3 +10,4 @@ __pycache__/
 /build/
 /dist/
 /word_ladder.egg-info/
+/docs/build/
