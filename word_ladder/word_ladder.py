@@ -80,14 +80,14 @@ class WordLadder(object):
         if end:
             self.end = end
 
-        if not start or not end:
+        if not self.start or not self.end:
             raise WordsNotDefined('Either start or end is not defined')
 
-        for vertex, path in self._walk_trough(start, self.graph):
+        for vertex, path in self._walk_trough(self.start, self.graph):
             if all_paths:
                 print(path)
 
-            if vertex == end:
+            if vertex == self.end:
                 return path
 
         return None

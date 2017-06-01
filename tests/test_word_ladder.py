@@ -106,6 +106,18 @@ class TestWordLadder(unittest.TestCase):
         word_ladder.find_path('flux', 'sail')
         eq_(id(word_ladder._graph_same_length), id(word_ladder.graph))
 
+    def test_find_path_if_words_are_defined_trough_instance_variables(self):
+        word_ladder = WordLadder(os.path.join(word_lists_dir, 'word_lists', 'linux_english_words_length_4'))
+        word_ladder.start = 'sail'
+        word_ladder.end = 'fear'
+        eq_(word_ladder.find_path(), ['sail', 'hail', 'hair', 'heir', 'hear', 'fear'])
+
+    def test_find_path_if_words_are_defined_at_instance_declaration_time(self):
+        word_ladder = WordLadder(os.path.join(word_lists_dir, 'word_lists', 'linux_english_words_length_4'), 'sail', 'fear')
+        eq_(word_ladder.find_path(), ['sail', 'hail', 'hair', 'heir', 'hear', 'fear'])
+
+
+
 
 
 
