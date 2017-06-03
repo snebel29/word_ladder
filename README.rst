@@ -13,6 +13,11 @@ Prerequisites
 -  List of words separated by newlines
 -  Virtual environment is recommended
 
+Documentation
+-------------
+
+- http://word-ladder.readthedocs.io/en/latest/
+
 Installing
 ----------
 
