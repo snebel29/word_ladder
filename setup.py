@@ -1,21 +1,23 @@
+import os
 from setuptools import setup
 from word_ladder import __version__
 
+my_dir = os.path.dirname(os.path.realpath(__file__))
 
-with open('README.rst') as f:
+with open(os.path.join(my_dir, 'README.rst')) as f:
     long_description = f.read()
 
-with open('docs/docs_requirements.txt') as f:
+with open(os.path.join(my_dir, 'docs/docs_requirements.txt')) as f:
     doc_requirements = f.read().splitlines()
 
 requirements = ['docopt']
 dev_requirements = ['nose'] + doc_requirements
 
 setup(
-    name='word_ladder',
+    name='word-ladder',
     packages=['word_ladder'],
     version=__version__,
-    description='word ladder find path between two words, changing one letter each step',
+    description='Word ladder find path between two words, changing one letter each step',
     long_description=long_description,
     url='https://github.com/snebel29/word_ladder',
     author='Sven Nebel',
