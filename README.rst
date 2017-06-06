@@ -16,27 +16,30 @@ Prerequisites
 Documentation
 -------------
 
-- http://word-ladder.readthedocs.io/en/latest/
+- http://word-ladder.readthedocs.io
 
 Installing
 ----------
 
+From PyPi
+~~~~~~~~~
+
+.. code:: bash
+
+    $ pip install word-ladder
+
+
+Manually
+~~~~~~~~
 Clone the repository (Pypi package comming soon)
 
 .. code:: bash
 
     $ git clone git@github.com:snebel29/word_ladder.git
     $ cd word_ladder
-
-Production
-~~~~~~~~~~
-
-.. code:: bash
-
     $ pip install .
 
-Development
-~~~~~~~~~~~
+to install development dependencies as well
 
 .. code:: bash
 
