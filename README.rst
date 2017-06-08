@@ -86,6 +86,12 @@ You will have to use nose to run the tests
 
     $ nosetests
 
+Contributing
+------------
+
+Clone development branch then create pull requests against it
+
+
 References
 ----------
 
