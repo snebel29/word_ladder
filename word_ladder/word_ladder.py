@@ -5,7 +5,7 @@ from collections import defaultdict, deque
 from itertools import product
 from word_ladder.errors import WordsNotDefined
 
-__version__ = '1.0.1'
+__version__ = '1.1.0'
 
 
 class Graph(object):
