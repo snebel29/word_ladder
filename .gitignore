@@ -11,3 +11,4 @@ __pycache__/
 /dist/
 /word_ladder.egg-info/
 /docs/build/
+/.vscode
