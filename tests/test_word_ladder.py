@@ -1,4 +1,5 @@
 import os
+import re
 import unittest
 from nose.tools import ok_, eq_, raises
 from word_ladder import WordLadder, Graph
@@ -8,9 +9,10 @@ word_lists_dir = os.path.dirname(__file__)
 
 
 class TestGraph(unittest.TestCase):
-    def setUp(self):
-        self.graph = Graph(['hello', 'hella', 'holla'])
-        self.graph.build()
+    @classmethod
+    def setUpClass(cls):
+        cls.graph = Graph(['hello', 'hella', 'holla'])
+        cls.graph.build()
 
     def test_build(self):
         eq_(self.graph._graph['hello'], {'hella'})
@@ -47,8 +49,29 @@ class TestGraph(unittest.TestCase):
 
 
 class TestWordLadder(unittest.TestCase):
-    def setUp(self):
-        self.word_ladder = WordLadder(os.path.join(word_lists_dir, 'word_lists', 'linux_english_words_length_4'))
+    @classmethod
+    def setUpClass(cls):
+        cls.clean_tmp_files()
+        cls.word_ladder = WordLadder(os.path.join(word_lists_dir, 'word_lists', 'linux_english_words_length_4'))
+
+    @classmethod
+    def clean_tmp_files(cls):
+        for f in os.listdir(WordLadder.tmp):
+            if re.search('.*_(SAME|DIFF)', f):
+                os.remove(os.path.join(WordLadder.tmp, f))
+
+    def test_find_path_caching(self):
+        self.clean_tmp_files()
+        word_ladder = WordLadder(os.path.join(word_lists_dir, 'word_lists', 'linux_english_words_length_4'))
+        word_ladder.find_path('fear', 'fear'), ['fear']
+        eq_(word_ladder._retrieval_method, 'scratch')
+
+        word_ladder.find_path('fear', 'fear'), ['fear']
+        eq_(word_ladder._retrieval_method, 'memory')
+
+        word_ladder = WordLadder(os.path.join(word_lists_dir, 'word_lists', 'linux_english_words_length_4'))
+        word_ladder.find_path('fear', 'fear'), ['fear']
+        eq_(word_ladder._retrieval_method, 'pickling')
 
     def test_word_list_is_created(self):
         ok_(isinstance(self.word_ladder.words, list))

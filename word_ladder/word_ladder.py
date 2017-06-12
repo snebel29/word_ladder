@@ -1,3 +1,6 @@
+import os
+import hashlib
+import pickle
 from collections import defaultdict, deque
 from itertools import product
 from word_ladder.errors import WordsNotDefined
@@ -16,6 +19,7 @@ class Graph(object):
         self._words = words
         self._graph = defaultdict(set)
         self._buckets = defaultdict(list)
+        self.same_length = None
 
     def build(self, all_lengths=True):
         """
@@ -43,6 +47,9 @@ class Graph(object):
             modifier = 1 Append words to buckets with the same number of letter
             modifier = 0 Append words to buckets with one more letter
         """
+        self.same_length = all_lengths
+        self._buckets.clear()
+
         for word in self._words:
             for modifier in range(1, (all_lengths * -1), -1):
                 for i in range(len(word)+modifier):
@@ -66,21 +73,46 @@ class WordLadder(object):
         start (:obj:`str`, optional): The starting word, Defaults to None
         end (:obj:`str`, optional): The ending word, Defaults to None
     """
-    def __init__(self, dictionary, start=None, end=None):
-        if isinstance(dictionary, list):
-            self.words = dictionary
-        else:
-            self.words = open(dictionary).read().splitlines()
+    tmp = '/tmp'
 
+    def __init__(self, dictionary, start=None, end=None):
         self.start = start
         self.end = end
 
+        self._words_hash = None
         self._graph_same_length = None
         self._graph_diff_length = None
+
+        self.words = dictionary
+
+    @property
+    def words(self):
+        """
+        Holds the list of words
+
+        Returns:
+            (:obj:`list`) The list of words
+        """
+        return self._words
+
+    @words.setter
+    def words(self, dictionary):
+        if isinstance(dictionary, list):
+            self._words = dictionary
+        else:
+            self._words = open(dictionary).read().splitlines()
+
+        self._words_hash = hashlib.sha1(
+            self._words.__str__().encode('utf-8')).hexdigest()
 
     def words_has_same_length(self):
         """
         Compare length of start and end words
+
+        Note:
+            when setting words an internal hash value is created for
+            caching purpose, so we don't process the grah again if there is a serialzed
+            version of the graph object
 
         Returns:
             (:obj:`bool` or :obj:`None`) True, False or None)
@@ -97,23 +129,32 @@ class WordLadder(object):
     def graph(self):
         """
         Holds an instance of :class:`Graph` with the dictionary words
-
         Returns:
             (:obj:`Graph`): The graph memoized instance
         """
         if self.words_has_same_length():
-            if not self._graph_same_length:
-                self._graph_same_length = Graph(self.words).build(
-                                                    all_lengths=False)
-
-            return self._graph_same_length
-
+            kind = 'same'
+            all_lengths = False
         else:
-            if not self._graph_diff_length:
-                self._graph_diff_length = Graph(self.words).build(
-                                                    all_lengths=True)
+            kind = 'diff'
+            all_lengths = True
 
-            return self._graph_diff_length
+        self._retrieval_method = 'memory'
+
+        if not eval('self._graph_{0}_length'.format(kind)):
+            file = os.path.join(self.tmp, self._words_hash + '_{0}'.format(kind.upper()))
+            if os.path.exists(file):
+                self._retrieval_method = 'pickling'
+                exec('self._graph_{0}_length = pickle.load(open(file, "rb"))'.format(kind))
+
+            else:
+                self._retrieval_method = 'scratch'
+                exec('self._graph_{0}_length = Graph(self.words).build(\
+                                                all_lengths={1})'.format(kind, all_lengths))
+
+                exec('pickle.dump(self._graph_{0}_length, open(file, "wb"))'.format(kind))
+
+        return eval('self._graph_{0}_length'.format(kind))
 
     def find_path(self, start=None, end=None, all_paths=False):
         """
