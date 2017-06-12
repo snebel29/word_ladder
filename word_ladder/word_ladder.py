@@ -109,11 +109,6 @@ class WordLadder(object):
         """
         Compare length of start and end words
 
-        Note:
-            when setting words an internal hash value is created for
-            caching purpose, so we don't process the grah again if there is a serialzed
-            version of the graph object
-
         Returns:
             (:obj:`bool` or :obj:`None`) True, False or None)
         """
@@ -129,6 +124,12 @@ class WordLadder(object):
     def graph(self):
         """
         Holds an instance of :class:`Graph` with the dictionary words
+
+        Note:
+            when setting words an internal hash value is created for
+            caching purpose, so we don't process the grah again if there is a serialzed
+            version of the graph object
+
         Returns:
             (:obj:`Graph`): The graph memoized instance
         """
